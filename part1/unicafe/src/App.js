@@ -10,11 +10,6 @@ const Button = (props) => {
 }
 
 const Statistic = ({text, value, optionalSuffix}) => {
-  // return (
-  //   <div>
-  //     <p>{text} {value} {optionalSuffix}</p>
-  //   </div>
-  // )
   return (
     <tbody>
       <tr>
