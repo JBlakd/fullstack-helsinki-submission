@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './index.css'
 
 const Button = (props) => {
   return (
@@ -8,11 +9,67 @@ const Button = (props) => {
   )
 }
 
-// const Statistics = (props) => {
-//   return (
+const Statistic = ({text, value, optionalSuffix}) => {
+  // return (
+  //   <div>
+  //     <p>{text} {value} {optionalSuffix}</p>
+  //   </div>
+  // )
+  return (
+    <tbody>
+      <tr>
+        <td className="table-data">{text}</td>
+        <td className="table-data">{value} {optionalSuffix}</td>
+      </tr>
+    </tbody> 
+  )
+}
 
-//   )
-// }
+const Statistics = ({good, neutral, bad}) => {
+  const all = good + neutral + bad
+
+  if (all === 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        No feedback given
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <h1>statistics</h1>
+      <table>
+        <Statistic 
+          text = "good"
+          value = {good}
+        />
+        <Statistic 
+          text = "neutral"
+          value = {neutral}
+        />
+        <Statistic 
+          text = "bad"
+          value = {bad}
+        />
+        <Statistic 
+          text = "all"
+          value = {all}
+        />
+        <Statistic 
+          text = "average"
+          value = {(good*1+neutral*0+bad*(-1))/all}
+        />
+        <Statistic 
+          text = "positive"
+          value = {(good*100)/all}
+          optionalSuffix = "%"
+        />
+      </table>
+    </div>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -39,13 +96,11 @@ const App = () => {
         handleClick = {badIncrement}
         text = 'bad'
       />
-      <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {good + neutral + bad}</p>
-      <p>average {(good*1+neutral*0+bad*(-1))/(good + neutral + bad)}</p>
-      <p>positive {(good*100)/(good + neutral + bad)} %</p>
+      <Statistics 
+        good = {good}
+        neutral = {neutral}
+        bad = {bad}
+      />
     </div>
   )
 }
