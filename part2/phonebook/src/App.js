@@ -35,6 +35,8 @@ const PersonForm = (props) => {
   const setNewName = props.setNewName
   const newNumber = props.newNumber
   const setNewNumber = props.setNewNumber
+  const filterString = props.filterString
+  const setFilterString = props.setFilterString
 
   const addPerson = (e) => {
     e.preventDefault()
@@ -48,8 +50,10 @@ const PersonForm = (props) => {
       name : newName,
       number : newNumber
     }
+    console.log('personObject: ', personObject)
     setPersons(persons.concat(personObject))
     setNewName('')
+    setFilterString('Erase this to see change')
     console.log('button clicked', e.target)
   }
 
@@ -130,9 +134,15 @@ const App = () => {
           setNewName = {setNewName}
           newNumber = {newNumber}
           setNewNumber = {setNewNumber}
+          filterString = {filterString}
+          setFilterString = {setFilterString}
       />
 
       <h3>Numbers</h3>
+      <p>
+        Note: Newly added persons will not automatically reflect in the following list.
+        Please erase the filter input field to see the newly added person.
+      </p>
       <Persons 
         phoneBookEntriesToShow = {phoneBookEntriesToShow}
       />
