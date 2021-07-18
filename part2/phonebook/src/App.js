@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const PhoneBookEntry = ({name, number}) => {
   return (
@@ -36,7 +36,6 @@ const PersonForm = (props) => {
   const setNewName = props.setNewName
   const newNumber = props.newNumber
   const setNewNumber = props.setNewNumber
-  const filterString = props.filterString
   const setFilterString = props.setFilterString
 
   const addPerson = (e) => {
@@ -52,11 +51,15 @@ const PersonForm = (props) => {
       number : newNumber
     }
     console.log('personObject: ', personObject)
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
-    setFilterString('Erase this to see change')
-    console.log('button clicked', e.target)
+
+    personService
+      .create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+        setFilterString('Erase this to see change')
+      })
   }
 
   const handleNameChange = (e) => {
@@ -121,8 +124,8 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect start execution')
-    axios
-      .get("http://localhost:3001/persons")
+    personService
+      .getAll("http://localhost:3001/persons")
       .then(response => {
         console.log('promise fulfilled: ', response.data)
         setPersons(response.data)
@@ -147,7 +150,6 @@ const App = () => {
           setNewName = {setNewName}
           newNumber = {newNumber}
           setNewNumber = {setNewNumber}
-          filterString = {filterString}
           setFilterString = {setFilterString}
       />
 

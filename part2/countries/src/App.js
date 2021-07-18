@@ -28,23 +28,62 @@ const Filter = ({countries, filterString, setFilterString, setCountriesToShow}) 
 }
 
 const SingleCountryDisplay = ({country, showFlag}) => {
+  const [ displayCountry, setDisplayCountry ] = useState(country)
+    // API call to weather service. Upon fulfilment of the promise, change the weather state of 
+    // countriesToShow so that the application gets re-rendered
+    const apiKey = '2c50a43410d83cfcccea81e3ae3bad2c'
+    const displayCountryCopy = JSON.parse(JSON.stringify(displayCountry))
+    useEffect(() => {
+      console.log('weather api start execution')
+      axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital}
+          &appid=${apiKey}&units=metric`)
+        .then(response => {
+          console.log('promise fulfilled: ', response.data)
+          displayCountryCopy.weatherObj = response.data
+          setDisplayCountry(displayCountryCopy)          
+        })
+    }, [])
   if (showFlag) {
-    return (
-      <div>
-        <h1>{country.name}</h1>
-        <div>capital {country.capital}</div>
-        <div>population {country.population}</div>
-        <h2>languages</h2>
-        <ul>
-          {country.languages.map(language =>
-            <li key={language.name}>
-              {language.name}
-            </li>
-          )}
-        </ul>
-        <img className="flag" src={country.flag} alt='national flag of the country'/>
-      </div>
-    )
+    if (displayCountry.weatherObj === undefined) {
+      return (
+        <div>
+          <h1>{displayCountry.name}</h1>
+          <div>capital {displayCountry.capital}</div>
+          <div>population {displayCountry.population}</div>
+          <h2>languages</h2>
+          <ul>
+            {displayCountry.languages.map(language =>
+              <li key={language.name}>
+                {language.name}
+              </li>
+            )}
+          </ul>
+          <img className="flag" src={displayCountry.flag} alt='national flag of the country'/>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h1>{displayCountry.name}</h1>
+          <div>capital {displayCountry.capital}</div>
+          <div>population {displayCountry.population}</div>
+          <h2>languages</h2>
+          <ul>
+            {displayCountry.languages.map(language =>
+              <li key={language.name}>
+                {language.name}
+              </li>
+            )}
+          </ul>
+          <img className="flag" src={displayCountry.flag} alt='national flag of the country'/>
+          <h2>Weather in {displayCountry.capital}</h2>
+          <img src={`https://openweathermap.org/img/wn/${displayCountry.weatherObj.weather[0].icon}.png`}/>
+          <h3>temperature: </h3> <div>{displayCountry.weatherObj.main.temp} Celsius</div>
+          <h3>Wind: </h3> <div> {displayCountry.weatherObj.wind.speed} km/h at bearing {displayCountry.weatherObj.wind.deg} </div>
+        </div>
+      )
+    } 
   } else {
     return <div></div>
   }
@@ -52,6 +91,7 @@ const SingleCountryDisplay = ({country, showFlag}) => {
 
 const CountriesDisplay = ({ countriesToShow, setCountriesToShow }) => {
   const handleShow = (country) => {
+    // Change the showFlag state of countriesToShow
     const currentShowFlag = country.showFlag
     let countriesToShowUpdatedCopy = JSON.parse(JSON.stringify(countriesToShow))
     console.log('country input to handleShow(): ', country)
