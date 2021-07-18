@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const PhoneBookEntry = ({name, number}) => {
   return (
@@ -53,6 +54,7 @@ const PersonForm = (props) => {
     console.log('personObject: ', personObject)
     setPersons(persons.concat(personObject))
     setNewName('')
+    setNewNumber('')
     setFilterString('Erase this to see change')
     console.log('button clicked', e.target)
   }
@@ -105,16 +107,27 @@ const Persons = ({phoneBookEntriesToShow}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  // const [persons, setPersons] = useState([
+  //   { name: 'Arto Hellas', number: '040-123456' },
+  //   { name: 'Ada Lovelace', number: '39-44-5323523' },
+  //   { name: 'Dan Abramov', number: '12-43-234345' },
+  //   { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  // ]) 
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [ filterString, setFilterString ] = useState('')
+  const [ filterString, setFilterString ] = useState('Erase this to see change')
   const [ phoneBookEntriesToShow, setPhoneBookEntriesToShow ] = useState(persons)
+
+  useEffect(() => {
+    console.log('effect start execution')
+    axios
+      .get("http://localhost:3001/persons")
+      .then(response => {
+        console.log('promise fulfilled: ', response.data)
+        setPersons(response.data)
+      })
+  }, [])
 
   return (
     <div>
