@@ -1,6 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import personService from './services/personsService'
 
+const Notification = ({ notificationObj }) => {
+  const message = notificationObj.message
+  const notificationType = notificationObj.notificationType
+
+  const okStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: '20px',
+    borderStyle: 'solid',
+    borderRadius: '5px',
+    padding: '10px',
+    marginBottom: '10px'
+  }
+
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: '20px',
+    borderStyle: 'solid',
+    borderRadius: '5px',
+    padding: '10px',
+    marginBottom: '10px'
+  }
+
+  console.log('notificationObj: ', notificationObj)
+
+  if (message === null) {
+    return null
+  }
+
+  if (notificationType === "ok") {
+    return (
+      <div style={okStyle}>
+        {message}
+      </div>
+    )
+  } else if (notificationType === "error") {
+    return (
+      <div style={errorStyle}>
+        {message}
+      </div>
+    )
+  } else {
+    console.error('Invalid notification type: ', notificationType)
+    return null
+  }
+} 
+
 const PhoneBookEntry = ({person, persons, setPersons, setFilterString}) => {
   const handleDelete = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
@@ -58,6 +106,7 @@ const PersonForm = (props) => {
   const newNumber = props.newNumber
   const setNewNumber = props.setNewNumber
   const setFilterString = props.setFilterString
+  const setNotificationObj = props.setNotificationObj
 
   const addPerson = (e) => {
     e.preventDefault()
@@ -87,9 +136,14 @@ const PersonForm = (props) => {
                 personsCopy[index] = response.data
               }
               setPersons(personsCopy)
+              setNotificationObj({message: `Phone number of ${response.data.name} changed to ${response.data.number}`, notificationType: 'ok'})
               setNewName('')
               setNewNumber('')
-            }
+            } 
+          })
+          .catch(error => {
+            console.log('update promise error: ', error)
+            setNotificationObj({message: `Information of ${personObject.name} has already been removed from the server`, notificationType: 'error'})
           })
       }
       return
@@ -99,6 +153,7 @@ const PersonForm = (props) => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
+        setNotificationObj({message: `Added ${response.data.name}`, notificationType: 'ok'})
         setNewName('')
         setNewNumber('')
         setFilterString('Erase this to see change')
@@ -166,6 +221,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterString, setFilterString ] = useState('Erase this to see change')
   const [ phoneBookEntriesToShow, setPhoneBookEntriesToShow ] = useState(persons)
+  const [ notificationObj, setNotificationObj ] = useState({message: null, notificationType: 'ok'})
 
   useEffect(() => {
     console.log('getAll effect start execution')
@@ -180,6 +236,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notificationObj={notificationObj} />
       <Filter 
         persons = {persons}
         filterString = {filterString}
@@ -196,6 +253,7 @@ const App = () => {
           newNumber = {newNumber}
           setNewNumber = {setNewNumber}
           setFilterString = {setFilterString}
+          setNotificationObj = {setNotificationObj}
       />
 
       <h3>Numbers</h3>
