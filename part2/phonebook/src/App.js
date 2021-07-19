@@ -1,10 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import personService from './services/persons'
+import personService from './services/personsService'
 
-const PhoneBookEntry = ({name, number}) => {
+const PhoneBookEntry = ({person, persons, setPersons, setFilterString}) => {
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService 
+        .remove(person.id)
+        .then(response => {
+          console.log('delete promise fulfilled: ', response)
+          setFilterString('Erase this to see change')
+          if (response.status === 200) {
+            let personsCopy = JSON.parse(JSON.stringify(persons));
+            const itemToDelete = personsCopy.find(item => item.id === person.id)
+            const index = personsCopy.indexOf(itemToDelete)
+            if (index > -1) {
+              personsCopy.splice(index, 1)
+            }
+            setPersons(personsCopy)
+          }     
+        })
+    }
+  }
+
   return (
     <div>
-      {name} {number}
+      {person.id} | {person.name} {person.number} <button onClick={() => handleDelete(person)}>delete</button>
     </div>
   )
 }
@@ -12,6 +32,7 @@ const PhoneBookEntry = ({name, number}) => {
 const Filter = ({persons, filterString, setFilterString, setPhoneBookEntriesToShow}) => {
   const handleFilterStringChange = (e) => {
     setFilterString(e.target.value)
+    console.log('persons in handleFilterStringChange(): ', persons)
     const filterResult = persons.filter(person => 
       person.name.toLowerCase().includes(e.target.value.toLowerCase()))
     setPhoneBookEntriesToShow(filterResult)
@@ -41,16 +62,38 @@ const PersonForm = (props) => {
   const addPerson = (e) => {
     e.preventDefault()
 
-    if (persons.map(person => person.name).includes(newName)) {
-      alert(`${newName} is already added to the phonebook`)
-      return
-    }
-
     const personObject = {
       name : newName,
       number : newNumber
     }
-    console.log('personObject: ', personObject)
+    console.log('before duplicate check persons: ', persons, 'personObject: ', personObject)
+
+    if (persons.map(person => person.name).includes(newName)) {
+      console.log('before update confirmation persons: ', persons)
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+        const existingPerson = persons.find(person => person.name === newName)
+        console.log('persons: ', persons, 'existingPerson: ', existingPerson)
+        personService
+          .update(existingPerson.id, personObject)
+          .then(response => {
+            console.log('update promise fulfilled: ', response)
+            setFilterString('Erase this to see change')
+            if (response.status === 200) {
+              let personsCopy = JSON.parse(JSON.stringify(persons));
+              const itemToUpdate = personsCopy.find(item => item.id === response.data.id)
+              console.log('itemToUpdate: ', itemToUpdate)
+              const index = personsCopy.indexOf(itemToUpdate)
+              if (index > -1) {
+                personsCopy[index] = response.data
+              }
+              setPersons(personsCopy)
+              setNewName('')
+              setNewNumber('')
+            }
+          })
+      }
+      return
+    }
 
     personService
       .create(personObject)
@@ -94,14 +137,16 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({phoneBookEntriesToShow}) => {
+const Persons = ({phoneBookEntriesToShow, persons, setPersons, setFilterString}) => {
   return (
     <div>
         {phoneBookEntriesToShow.map(person =>
           <div key={person.name}>
             <PhoneBookEntry 
-              name = {person.name}
-              number = {person.number}
+              person = {person}
+              persons = {persons}
+              setPersons = {setPersons}
+              setFilterString = {setFilterString}
             />
           </div>
         )}
@@ -123,9 +168,9 @@ const App = () => {
   const [ phoneBookEntriesToShow, setPhoneBookEntriesToShow ] = useState(persons)
 
   useEffect(() => {
-    console.log('effect start execution')
+    console.log('getAll effect start execution')
     personService
-      .getAll("http://localhost:3001/persons")
+      .getAll()
       .then(response => {
         console.log('promise fulfilled: ', response.data)
         setPersons(response.data)
@@ -160,6 +205,9 @@ const App = () => {
       </p>
       <Persons 
         phoneBookEntriesToShow = {phoneBookEntriesToShow}
+        persons = {persons}
+        setPersons = {setPersons}
+        setFilterString = {setFilterString}
       />
     </div>
   )
