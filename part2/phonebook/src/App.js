@@ -235,7 +235,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phonebook (with streamlined deployment)</h2>
       <Notification notificationObj={notificationObj} />
       <Filter 
         persons = {persons}
