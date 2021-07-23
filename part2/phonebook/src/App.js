@@ -57,13 +57,14 @@ const PhoneBookEntry = ({person, persons, setPersons, setFilterString}) => {
         .then(response => {
           console.log('delete promise fulfilled: ', response)
           setFilterString('Erase this to see change')
-          if (response.status === 200) {
+          if (response.status === 204) {
             let personsCopy = JSON.parse(JSON.stringify(persons));
             const itemToDelete = personsCopy.find(item => item.id === person.id)
             const index = personsCopy.indexOf(itemToDelete)
             if (index > -1) {
               personsCopy.splice(index, 1)
             }
+            console.log('personsCopy after splicing: ', personsCopy)
             setPersons(personsCopy)
           }     
         })
@@ -143,7 +144,7 @@ const PersonForm = (props) => {
           })
           .catch(error => {
             console.log('update promise error: ', error)
-            setNotificationObj({message: `Information of ${personObject.name} has already been removed from the server`, notificationType: 'error'})
+            setNotificationObj({message: error.response.data.error, notificationType: 'error'})
           })
       }
       return
@@ -157,6 +158,10 @@ const PersonForm = (props) => {
         setNewName('')
         setNewNumber('')
         setFilterString('Erase this to see change')
+      })
+      .catch(error => {
+        console.log('error caught during person create: ', error.response.data)
+        setNotificationObj({message: error.response.data.error, notificationType: 'error'})
       })
   }
 
