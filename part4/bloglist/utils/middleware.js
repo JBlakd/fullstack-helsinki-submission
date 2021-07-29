@@ -1,7 +1,7 @@
 const logger = require('./logger')
 
 const errorHandler = (error, request, response, next) => {
-  // logger.info('error to be handled: ', error)
+  logger.info('error to be handled: ', error)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
