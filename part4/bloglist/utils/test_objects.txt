@@ -1,0 +1,28 @@
+/////////////////////////////// USERS ///////////////////////////////////////////////////
+
+{
+    "username": "JBlakd",
+    "name": "Ivan Hu",
+    "password": "sampleivanpw"
+}
+// 6103a7772b4c3e7618ab79fa
+
+
+{
+    "username": "belvita",
+    "name": "Benjamin Potts",
+    "password": "samplebenpw"
+}
+// 6103a88f2b4c3e7618ab7a0d
+
+/////////////////////////////// BLOGS ///////////////////////////////////////////////////
+
+
+
+{
+    "title": "gimp blog",
+    "author": "Quentin Tarantino",
+    "url": "https://www.indiewire.com/2020/04/pulp-fiction-gimp-backstory-tarantino-1202226996/",
+    "likes": 2,
+    "userId": "6103a7772b4c3e7618ab79fa"
+}
