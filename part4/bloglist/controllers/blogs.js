@@ -4,13 +4,13 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+// const getTokenFrom = (request) => {
+//   const authorization = request.get('authorization')
+//   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+//     return authorization.substring(7)
+//   }
+//   return null
+// }
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -19,8 +19,8 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response, next) => {
   try {
-    const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    // const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
     const user = await User.findById(decodedToken.id)
 
     const blog = new Blog({
@@ -44,8 +44,26 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
-    const result = await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    const userFromToken = await User.findById(decodedToken.id)
+    logger.info('DELETE decodedToken user:\t\t', userFromToken.toString())
+
+    const requestedBlog = await Blog.findById(request.params.id)
+    if (requestedBlog) {
+      logger.info('DELETE requestedBlog.user:\t', requestedBlog.user)
+      logger.info('Comparison of requestedBlog.user.toString() and decodedToken.id.toString(): ', requestedBlog.user === decodedToken.id)
+      if (requestedBlog.user.toString() === decodedToken.id.toString()) {
+        await Blog.findByIdAndRemove(request.params.id)
+        response.status(204).end()
+        return
+      } else {
+        response.status(401).json( {error: 'invalid token'} )
+      }
+    } else {
+      // Blog corresponding too request.params.id not found
+      response.status(404).json( {error: 'not found'} )
+    }
+    
   } catch(exception) {
     next(exception)
   }
