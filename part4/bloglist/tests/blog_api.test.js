@@ -104,15 +104,36 @@ describe("tests for 'blogs'", () => {
   })
   
   test('a valid blog can be added', async () => {
+    const newUser = {
+      username: "JBlakd",
+      name: "Ivan Hu",
+      password: "sampleivanpw"
+    }
+    
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const loggedInUser = await api
+      .post('/api/login')
+      .send({ username: newUser.username, password: newUser.password })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    logger.info('loggedInUser.body.token: ', loggedInUser.body.token)
+
     const newBlog = {
       title: "Joel On Software",
       author: "Joel Spolsky",
       url: "https://www.joelonsoftware.com/",
       likes: 1
     }
-  
+
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + loggedInUser.body.token.toString())
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -125,6 +146,26 @@ describe("tests for 'blogs'", () => {
   })
   
   test("if 'likes' not defined, it defaults to 0", async () => {
+    const newUser = {
+      username: "JBlakd",
+      name: "Ivan Hu",
+      password: "sampleivanpw"
+    }
+    
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const loggedInUser = await api
+      .post('/api/login')
+      .send({ username: newUser.username, password: newUser.password })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    logger.info('loggedInUser.body.token: ', loggedInUser.body.token)
+
     const newBlog = {
       title: "Joel On Software",
       author: "Joel Spolsky",
@@ -133,6 +174,7 @@ describe("tests for 'blogs'", () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + loggedInUser.body.token.toString())
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -148,6 +190,26 @@ describe("tests for 'blogs'", () => {
   })
   
   test("if 'title' or 'url' missing from POST request, status 400 Bad Request", async () => {
+    const newUser = {
+      username: "JBlakd",
+      name: "Ivan Hu",
+      password: "sampleivanpw"
+    }
+    
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const loggedInUser = await api
+      .post('/api/login')
+      .send({ username: newUser.username, password: newUser.password })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    logger.info('loggedInUser.body.token: ', loggedInUser.body.token)
+
     let newBlog = {
       title: "Joel On Software",
       author: "Joel Spolsky"
@@ -155,6 +217,7 @@ describe("tests for 'blogs'", () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + loggedInUser.body.token.toString())
       .send(newBlog)
       .expect(400)
     
@@ -165,6 +228,7 @@ describe("tests for 'blogs'", () => {
   
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + loggedInUser.body.token.toString())
       .send(newBlog)
       .expect(400)
   })
