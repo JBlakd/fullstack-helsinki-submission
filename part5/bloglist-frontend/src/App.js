@@ -13,9 +13,6 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [ notificationObj, setNotificationObj ] = useState({message: null, notificationType: 'ok'})
 
 
@@ -54,13 +51,12 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <AddBlogView 
           user = {user}
-          title = {title} 
-          setTitle = {setTitle} 
-          author = {author} 
-          setAuthor = {setAuthor} 
-          url = {url} 
-          setUrl = {setUrl} 
-          blogs = {blogs} 
+          // title = {title} 
+          // setTitle = {setTitle} 
+          // author = {author} 
+          // setAuthor = {setAuthor} 
+          // url = {url} 
+          // setUrl = {setUrl} 
           setBlogs = {setBlogs}
           setNotificationObj = {setNotificationObj}
           blogFormRef = {blogFormRef}
@@ -70,6 +66,7 @@ const App = () => {
       <BlogsView 
         user = {user}
         blogs = {blogs}
+        setBlogs = {setBlogs}
       />
     </div>
   )

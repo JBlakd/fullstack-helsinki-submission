@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import userService from '../services/users'
 
-const AddBlogView = ({ user, title, setTitle, author, setAuthor, url, setUrl, blogs, setBlogs, setNotificationObj, blogFormRef }) => {
+const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
   const handleAddBlog = async (event) => {
     event.preventDefault()
 
