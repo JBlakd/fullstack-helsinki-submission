@@ -1,6 +1,7 @@
 import React from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ username, setUsername, password, setPassword, user, setUser, setNotificationObj }) => {
   const handleLogin = async (event) => {
@@ -74,6 +75,13 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
       }
     </div>
   )
+}
+
+LoginForm.propTypes = { 
+  username: PropTypes.string.isRequired, 
+  setUsername: PropTypes.func.isRequired, 
+  password: PropTypes.string.isRequired, 
+  setPassword: PropTypes.func.isRequired
 }
 
 export default LoginForm

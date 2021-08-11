@@ -51,12 +51,6 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <AddBlogView 
           user = {user}
-          // title = {title} 
-          // setTitle = {setTitle} 
-          // author = {author} 
-          // setAuthor = {setAuthor} 
-          // url = {url} 
-          // setUrl = {setUrl} 
           setBlogs = {setBlogs}
           setNotificationObj = {setNotificationObj}
           blogFormRef = {blogFormRef}
