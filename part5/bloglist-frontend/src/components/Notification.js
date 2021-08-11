@@ -44,6 +44,6 @@ const Notification = ({ notificationObj }) => {
     console.error('Invalid notification type: ', notificationType)
     return null
   }
-} 
+}
 
 export default Notification

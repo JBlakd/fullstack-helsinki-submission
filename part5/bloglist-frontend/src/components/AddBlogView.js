@@ -26,10 +26,10 @@ const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
       setTitle('')
       setAuthor('')
       setUrl('')
-      setNotificationObj({message: `a new blog ${response.title} by ${response.author} added`, notificationType: 'ok'})
+      setNotificationObj({ message: `a new blog ${response.title} by ${response.author} added`, notificationType: 'ok' })
       blogFormRef.current.toggleVisibility()
       setTimeout(() => {
-        setNotificationObj({message: null, notificationType: 'ok'})
+        setNotificationObj({ message: null, notificationType: 'ok' })
       }, 4000)
     } catch (exception) {
       console.log(exception)
@@ -42,33 +42,33 @@ const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
         <h2>create new</h2>
         <div>
           title:
-            <input
+          <input
             type="text"
             value={title}
             name="Title"
             onChange={({ target }) => setTitle(target.value)}
-            />
+          />
         </div>
         <div>
           author:
-            <input
+          <input
             type="text"
             value={author}
             name="Author"
             onChange={({ target }) => setAuthor(target.value)}
-            />
+          />
         </div>
         <div>
           url:
-            <input
+          <input
             type="text"
             value={url}
             name="Url"
             onChange={({ target }) => setUrl(target.value)}
-            />
+          />
         </div>
         <button type="submit">create</button>
-      </form> 
+      </form>
     )
   } else {
     return <div></div>

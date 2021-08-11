@@ -21,9 +21,9 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
       setPassword('')
     } catch (exception) {
       console.log('Wrong credentials')
-      setNotificationObj({message: 'wrong username or password', notificationType: 'error'})
+      setNotificationObj({ message: 'wrong username or password', notificationType: 'error' })
       setTimeout(() => {
-        setNotificationObj({message: null, notificationType: 'ok'})
+        setNotificationObj({ message: null, notificationType: 'ok' })
       }, 4000)
     }
 
@@ -35,29 +35,29 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
       <form onSubmit={handleLogin}>
         <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
-            />
+          />
         </div>
         <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
-            />
+          />
         </div>
         <button type="submit">login</button>
-      </form> 
+      </form>
     )
   }
 
   const handleLogOut = () => {
-    localStorage.removeItem('loggedBlogAppUser');
+    localStorage.removeItem('loggedBlogAppUser')
     setUser(null)
   }
 
@@ -77,10 +77,10 @@ const LoginForm = ({ username, setUsername, password, setPassword, user, setUser
   )
 }
 
-LoginForm.propTypes = { 
-  username: PropTypes.string.isRequired, 
-  setUsername: PropTypes.func.isRequired, 
-  password: PropTypes.string.isRequired, 
+LoginForm.propTypes = {
+  username: PropTypes.string.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
   setPassword: PropTypes.func.isRequired
 }
 

@@ -10,16 +10,16 @@ import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [ notificationObj, setNotificationObj ] = useState({message: null, notificationType: 'ok'})
+  const [ notificationObj, setNotificationObj ] = useState({ message: null, notificationType: 'ok' })
 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -35,11 +35,11 @@ const App = () => {
 
   return (
     <div>
-      <TitleView 
+      <TitleView
         user = {user}
       />
       <Notification notificationObj={notificationObj} />
-      <LoginForm 
+      <LoginForm
         username = {username}
         setUsername = {setUsername}
         password = {password}
@@ -49,7 +49,7 @@ const App = () => {
         setNotificationObj = {setNotificationObj}
       />
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <AddBlogView 
+        <AddBlogView
           user = {user}
           setBlogs = {setBlogs}
           setNotificationObj = {setNotificationObj}
@@ -57,7 +57,7 @@ const App = () => {
         />
       </Togglable>
       <br></br>
-      <BlogsView 
+      <BlogsView
         user = {user}
         blogs = {blogs}
         setBlogs = {setBlogs}

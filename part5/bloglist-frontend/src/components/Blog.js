@@ -2,7 +2,7 @@ import React from 'react'
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, setBlogs, user}) => {
+const Blog = ({ blog, setBlogs, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -38,12 +38,12 @@ const Blog = ({blog, setBlogs, user}) => {
       <div>{blog.title} | {blog.author}</div>
       <Togglable buttonLabel="view">
         {blog.url} <br></br>
-        likes {blog.likes} <button onClick={() => likeHandler(blog.id)}>like</button> <br></br> 
-        {blog.user.name} 
+        likes {blog.likes} <button onClick={() => likeHandler(blog.id)}>like</button> <br></br>
+        {blog.user.name}
       </Togglable>
       { isBlogBelongsToLoggedInUser && <button onClick={() => deleteHandler(blog)}>remove</button> }
-    </div>  
-  ) 
+    </div>
+  )
 }
 
 export default Blog

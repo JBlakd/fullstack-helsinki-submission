@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TitleView = ({user}) => {
+const TitleView = ({ user }) => {
   if (user) {
     return (
       <h2>blogs</h2>
