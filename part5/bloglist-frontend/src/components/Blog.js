@@ -34,14 +34,14 @@ const Blog = ({ blog, setBlogs, user }) => {
   let isBlogBelongsToLoggedInUser = (blog.user.username === user.username) ? true : false
 
   return (
-    <div style={blogStyle}>
+    <div className="singleBlog" style={blogStyle}>
       <div>{blog.title} | {blog.author}</div>
-      <Togglable buttonLabel="view">
+      <Togglable class="blogViewButton" buttonLabel="view">
         {blog.url} <br></br>
-        likes {blog.likes} <button onClick={() => likeHandler(blog.id)}>like</button> <br></br>
+        likes {blog.likes} <button className="likeButton" onClick={() => likeHandler(blog.id)}>like</button> <br></br>
         {blog.user.name}
       </Togglable>
-      { isBlogBelongsToLoggedInUser && <button onClick={() => deleteHandler(blog)}>remove</button> }
+      { isBlogBelongsToLoggedInUser && <button className="removeButton" onClick={() => deleteHandler(blog)}>remove</button> }
     </div>
   )
 }

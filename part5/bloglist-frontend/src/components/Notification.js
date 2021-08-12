@@ -30,13 +30,13 @@ const Notification = ({ notificationObj }) => {
 
   if (notificationType === "ok") {
     return (
-      <div style={okStyle}>
+      <div className="okNotification" style={okStyle}>
         {message}
       </div>
     )
   } else if (notificationType === "error") {
     return (
-      <div style={errorStyle}>
+      <div className="error" style={errorStyle}>
         {message}
       </div>
     )

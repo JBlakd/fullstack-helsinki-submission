@@ -43,6 +43,7 @@ const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
         <div>
           title:
           <input
+            id="new-title-input"
             type="text"
             value={title}
             name="Title"
@@ -52,6 +53,7 @@ const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
         <div>
           author:
           <input
+            id="new-author-input"
             type="text"
             value={author}
             name="Author"
@@ -61,13 +63,14 @@ const AddBlogView = ({ user, setBlogs, setNotificationObj, blogFormRef }) => {
         <div>
           url:
           <input
+            id="new-url-input"
             type="text"
             value={url}
             name="Url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">create</button>
+        <button id="new-blog-create-button" type="submit">create</button>
       </form>
     )
   } else {
